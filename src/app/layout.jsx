@@ -8,7 +8,11 @@ const RamenCard = () => {
       className="w-full aspect-square rounded-lg flex items-center justify-center p-6"
       style={{ backgroundColor: "#fff", border: "1px solid #ccc" }}
     >
-      Text
+      <img
+        className="w-full"
+        src="/shin.png"
+        style={{ imageRendering: "pixelated" }}
+      />
     </div>
   );
 };

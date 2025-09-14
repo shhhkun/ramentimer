@@ -2,28 +2,38 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors"); // middleware
 
-// simple array to act as PostgreSQL database table
-let timerLogs = [];
+require("dotenv").config();
+const { Client } = require("pg");
 
 // initialize server; create Express application
 const app = express();
 const PORT = 3001;
 
-// use the cors middleware to allow cross-origin requests
-app.use(cors());
+app.use(cors()); // use the cors middleware to allow cross-origin requests
+app.use(bodyParser.json()); // use body-parser to handle JSON data from frontend
 
-// use body-parser to handle JSON data from frontend
-app.use(bodyParser.json());
+// create a new PostgreSQL client using the connection string from the .env file
+const client = new Client({
+  connectionString: process.env.NEON_DB_URL,
+});
 
 // GET /api/timers
 // send entire array (table) as a response; serves all timer history
-app.get("/api/timers", (req, res) => {
-  res.status(200).json(timerLogs);
+app.get("/api/timers", async (req, res) => {
+  try {
+    const result = await client.query(
+      "SELECT * FROM timer_logs ORDER BY start_time DESC;"
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error fetching timer logs:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // POST /api/timers
 // retrieve formatted data from frontend, validate, then save (push) as entry in timerLogs
-app.post("/api/timers", (req, res) => {
+app.post("/api/timers", async (req, res) => {
   const { ramenName, duration } = req.body; // from frontend request body
 
   // validate data
@@ -33,20 +43,47 @@ app.post("/api/timers", (req, res) => {
       .json({ error: "Ramen name and duration are required." });
   }
 
-  // create a new log entry
-  const newLog = {
-    id: Date.now(), // normally auto-generated in real database
-    ramenName: ramenName,
-    duration: duration,
-    startTime: new Date().toISOString(),
-  };
-
-  timerLogs.push(newLog);
-
-  res.status(201).json(newLog);
+  try {
+    const result = await client.query(
+      "INSERT INTO timer_logs(ramen_name, duration_seconds, start_time) VALUES($1, $2, $3) RETURNING *;",
+      [ramenName, duration, new Date().toISOString()]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error inserting new timer log:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+async function connectToDbAndStartServer() {
+  try {
+    // connect to the PostgreSQL database
+    await client.connect();
+    console.log("Connected to PostgreSQL database!");
+
+    // create the timer_logs table if it doesn't already exist
+    const createTableQuery = `
+      CREATE TABLE IF NOT EXISTS timer_logs (
+        id SERIAL PRIMARY KEY,
+        ramen_name VARCHAR(255) NOT NULL,
+        duration_seconds INT NOT NULL,
+        start_time TIMESTAMP NOT NULL
+      );
+    `;
+    await client.query(createTableQuery);
+    console.log("Timer logs table is ready.");
+
+    // start Express server
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error(
+      "Failed to connect to the database or start the server:",
+      err
+    );
+    process.exit(1);
+  }
+}
+
+connectToDbAndStartServer();

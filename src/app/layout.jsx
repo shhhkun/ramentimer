@@ -6,7 +6,7 @@ import "./globals.css";
 // data for ramen:
 // - brand name, image src, time in secs
 const ramenData = [
-  { name: "Shin", imageSrc: "/shin.png", duration: 240 },
+  { name: "Shin", imageSrc: "/shin.png", duration: 5 },
   { name: "Jin", imageSrc: "/jin.png", duration: 270 },
   { name: "Samyang", imageSrc: "/samyang.png", duration: 300 },
   { name: "Paldo", imageSrc: "/paldo.png", duration: 210 },
@@ -39,6 +39,9 @@ const Layout = ({ children }) => {
   const [timerStatus, setTimerStatus] = useState("idle"); // idle, running, paused, finished
   const [timeRemaining, setTimeRemaining] = useState(0);
 
+  const [timerLogs, setTimerLogs] = useState([]);
+  const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
     try {
@@ -61,6 +64,20 @@ const Layout = ({ children }) => {
     }
   };
 
+  // helper function to fetch logs from the backend
+  const fetchTimers = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/timers");
+      if (!response.ok) {
+        throw new Error("Failed to fetch timer logs.");
+      }
+      const data = await response.json();
+      setTimerLogs(data);
+    } catch (error) {
+      console.error("Error fetching timer logs:", error);
+    }
+  };
+
   // useEffect to handle the timer countdown logic
   useEffect(() => {
     let intervalId;
@@ -71,7 +88,7 @@ const Layout = ({ children }) => {
       }, 1000);
     } else if (timeRemaining === 0 && timerStatus === "running") {
       setTimerStatus("finished");
-      alert("Ramen is ready!");
+      setShowCompletionMessage(true);
 
       // log the timer completion to the backend
       if (selectedRamen) {
@@ -79,13 +96,18 @@ const Layout = ({ children }) => {
           ramenName: selectedRamen.name,
           duration: selectedRamen.duration,
         });
+        fetchTimers();
       }
     }
 
-    // cleanup function to clear the interval when the component unmounts
-    // or when the dependencies change to prevent memory leaks
+    // cleanup function to clear the interval
     return () => clearInterval(intervalId);
-  }, [timerStatus, timeRemaining]);
+  }, [timerStatus, timeRemaining, selectedRamen]);
+
+  // useEffect to fetch logs on initial component load
+  useEffect(() => {
+    fetchTimers();
+  }, []);
 
   const handleStartTimer = () => {
     if (selectedRamen && timerStatus !== "running") {
@@ -110,6 +132,11 @@ const Layout = ({ children }) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
   };
 
   return (
@@ -206,6 +233,62 @@ const Layout = ({ children }) => {
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* temp completion message modal */}
+            {showCompletionMessage && (
+              <div className="fixed inset-0 flex items-center justify-center z-20">
+                <div className="bg-white rounded-xl p-6 shadow-xl w-full max-w-xs text-center border-4 border-green-500">
+                  <h2 className="text-2xl font-bold text-green-700">
+                    Ramen is Ready!
+                  </h2>
+                  <p className="mt-2">Enjoy your meal.</p>
+                  <button
+                    onClick={() => {
+                      setShowCompletionMessage(false);
+                      handleResetTimer();
+                    }}
+                    className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg font-bold"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* temp display timer history */}
+          <div
+            className="mt-6 w-full max-w-sm rounded-xl p-6"
+            style={{ backgroundColor: "#d48d3bff" }}
+          >
+            <h2
+              className="text-center text-2xl font-extrabold mb-4"
+              style={{ color: "#451a03" }}
+            >
+              Timer History
+            </h2>
+            {timerLogs.length > 0 ? (
+              <ul className="space-y-2">
+                {timerLogs.map((log) => (
+                  <li key={log.id} className="p-3 bg-white rounded-lg text-sm">
+                    <p>
+                      <strong>Ramen:</strong> {log.ramen_name}
+                    </p>
+                    <p>
+                      <strong>Duration:</strong> {log.duration_seconds} seconds
+                    </p>
+                    <p>
+                      <strong>Completed:</strong>{" "}
+                      {formatDate(log.start_time)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-center text-gray-600">
+                No timers have been logged yet.
+              </p>
             )}
           </div>
         </div>

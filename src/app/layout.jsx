@@ -39,6 +39,28 @@ const Layout = ({ children }) => {
   const [timerStatus, setTimerStatus] = useState("idle"); // idle, running, paused, finished
   const [timeRemaining, setTimeRemaining] = useState(0);
 
+  // helper function to send the log to the backend
+  const sendTimerLog = async (logData) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/timers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(logData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to log timer to the backend.");
+      }
+
+      const result = await response.json();
+      console.log("Timer logged successfully:", result);
+    } catch (error) {
+      console.error("Error sending timer log:", error);
+    }
+  };
+
   // useEffect to handle the timer countdown logic
   useEffect(() => {
     let intervalId;
@@ -50,6 +72,14 @@ const Layout = ({ children }) => {
     } else if (timeRemaining === 0 && timerStatus === "running") {
       setTimerStatus("finished");
       alert("Ramen is ready!");
+
+      // log the timer completion to the backend
+      if (selectedRamen) {
+        sendTimerLog({
+          ramenName: selectedRamen.name,
+          duration: selectedRamen.duration,
+        });
+      }
     }
 
     // cleanup function to clear the interval when the component unmounts

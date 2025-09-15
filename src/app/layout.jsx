@@ -168,13 +168,16 @@ const Layout = ({ children }) => {
 
               <Timer
                 selectedRamen={selectedRamen}
+                showCompletionMessage={showCompletionMessage}
                 timeRemaining={timeRemaining}
                 timerStatus={timerStatus}
                 handleStartTimer={handleStartTimer}
                 handlePauseTimer={handlePauseTimer}
                 handleResetTimer={handleResetTimer}
               />
+              
               <TimerDone
+                selectedRamen={selectedRamen}
                 showCompletionMessage={showCompletionMessage}
                 setShowCompletionMessage={setShowCompletionMessage}
                 handleResetTimer={handleResetTimer}

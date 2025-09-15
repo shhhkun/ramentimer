@@ -6,6 +6,7 @@ const formatTime = (seconds) => {
 
 const Timer = ({
   selectedRamen,
+  showCompletionMessage,
   timerStatus,
   timeRemaining,
   handleStartTimer,
@@ -13,7 +14,7 @@ const Timer = ({
   handleResetTimer,
 }) => {
   return (
-    selectedRamen && (
+    selectedRamen && !showCompletionMessage && (
       <div className="h-full w-full flex items-center justify-center z-10">
         <div className="relative flex-grow flex justify-center items-center p-6">
           <h2 className="absolute text-center -translate-y-36" style={{ fontSize: "1.25rem" }}>

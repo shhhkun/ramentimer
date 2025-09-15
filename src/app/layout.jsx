@@ -118,7 +118,7 @@ const Layout = ({ children }) => {
     <html lang="en">
       <body>
         <div
-          className="flex justify-center items-center min-h-screen w-screen p-6"
+          className="flex justify-center items-center min-h-screen w-screen"
           style={{
             backgroundColor: "#ebe2d8",
           }}
@@ -141,9 +141,10 @@ const Layout = ({ children }) => {
 
             {/* 2x3 ramen cards grid */}
             <div
-              className="grid grid-cols-2 rounded-xl gap-6 p-4"
+              className="w-full rounded-xl"
               style={{
                 backgroundColor: "#efd1af",
+                height: "500px",
                 backgroundImage:
                   "url('/4.png'), url('/3.png'), url('/2.png'), url('/1.png')",
                 backgroundRepeat: "no-repeat",
@@ -152,29 +153,33 @@ const Layout = ({ children }) => {
                 imageRendering: "pixelated",
               }}
             >
-              {ramenData.map((ramen, index) => (
-                <RamenCard
-                  key={index}
-                  ramen={ramen}
-                  onClick={() => setSelectedRamen(ramen)}
-                />
-              ))}
+              {!selectedRamen && (
+                <div className="grid grid-cols-2 gap-6 p-4">
+                  {ramenData.map((ramen, index) => (
+                    <RamenCard
+                      key={index}
+                      selectedRamen={selectedRamen}
+                      ramen={ramen}
+                      onClick={() => setSelectedRamen(ramen)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <Timer
+                selectedRamen={selectedRamen}
+                timeRemaining={timeRemaining}
+                timerStatus={timerStatus}
+                handleStartTimer={handleStartTimer}
+                handlePauseTimer={handlePauseTimer}
+                handleResetTimer={handleResetTimer}
+              />
+              <TimerDone
+                showCompletionMessage={showCompletionMessage}
+                setShowCompletionMessage={setShowCompletionMessage}
+                handleResetTimer={handleResetTimer}
+              />
             </div>
-
-            <Timer
-              selectedRamen={selectedRamen}
-              timeRemaining={timeRemaining}
-              timerStatus={timerStatus}
-              handleStartTimer={handleStartTimer}
-              handlePauseTimer={handlePauseTimer}
-              handleResetTimer={handleResetTimer}
-            />
-
-            <TimerDone
-              showCompletionMessage={showCompletionMessage}
-              setShowCompletionMessage={setShowCompletionMessage}
-              handleResetTimer={handleResetTimer}
-            />
           </div>
 
           {/* temp display timer history */}

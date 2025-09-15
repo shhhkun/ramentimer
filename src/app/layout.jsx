@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import RamenCard from "./components/RamenCard";
+import Timer from "./components/Timer";
+import TimerDone from "./components/TimerDone";
 import "./globals.css";
 
-// data for ramen:
-// - brand name, image src, time in secs
+// data for ramen: (brand name, image src, time in secs)
 const ramenData = [
   { name: "Shin", imageSrc: "/shin.png", duration: 5 },
   { name: "Jin", imageSrc: "/jin.png", duration: 270 },
@@ -14,31 +16,10 @@ const ramenData = [
   { name: "Indomie", imageSrc: "/indomie.png", duration: 240 },
 ];
 
-const RamenCard = ({ ramen, onClick, isSelected }) => {
-  return (
-    <div
-      onClick={onClick}
-      className={`
-        w-full aspect-square rounded-lg flex flex-col items-center justify-center p-4 cursor-pointer
-      `}
-      style={{ backgroundColor: "#fff" }}
-    >
-      <img
-        className="w-full h-auto transition-transform duration-200 ease-in-out hover:scale-110"
-        src={ramen.imageSrc}
-        alt={ramen.name}
-        style={{ imageRendering: "pixelated" }}
-      />
-      <h2 className="mt-2 text-center font-semibold text-lg">{ramen.name}</h2>
-    </div>
-  );
-};
-
 const Layout = ({ children }) => {
   const [selectedRamen, setSelectedRamen] = useState(null);
   const [timerStatus, setTimerStatus] = useState("idle"); // idle, running, paused, finished
   const [timeRemaining, setTimeRemaining] = useState(0);
-
   const [timerLogs, setTimerLogs] = useState([]);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
 
@@ -128,12 +109,6 @@ const Layout = ({ children }) => {
     setSelectedRamen(null);
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -149,116 +124,61 @@ const Layout = ({ children }) => {
           }}
         >
           <div
-            className="w-full max-w-sm rounded-xl p-6"
+            className="w-full max-w-sm rounded-xl pb-6 pr-6 pl-6"
             style={{
               backgroundColor: "#efd1af",
             }}
           >
             <h1
-              className="text-center text-3xl font-extrabold mb-6"
-              stlye={{
+              className="text-center font-bold py-1"
+              style={{
                 color: "#451a03",
+                fontSize: "1.75rem",
               }}
             >
               Ramen Timer
             </h1>
 
             {/* 2x3 ramen cards grid */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div
+              className="grid grid-cols-2 rounded-xl gap-6 p-4"
+              style={{
+                backgroundColor: "#efd1af",
+                backgroundImage:
+                  "url('/4.png'), url('/3.png'), url('/2.png'), url('/1.png')",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "auto 100%, auto 100%, auto 100%, auto 100%",
+                imageRendering: "pixelated",
+              }}
+            >
               {ramenData.map((ramen, index) => (
                 <RamenCard
                   key={index}
                   ramen={ramen}
                   onClick={() => setSelectedRamen(ramen)}
-                  isSelected={
-                    selectedRamen && selectedRamen.name === ramen.name
-                  }
                 />
               ))}
             </div>
 
-            {/* temp timer modal */}
-            {selectedRamen && (
-              <div
-                className="fixed inset-0 flex items-center justify-center z-10 p-6"
-                style={{
-                  backdropFilter: "blur(4px)",
-                  backgroundColor: "rgba(0,0,0,0.3)",
-                }}
-              >
-                <div className="bg-white rounded-xl p-6 shadow-xl w-full max-w-xs text-center">
-                  <h2 className="text-2xl font-bold">
-                    Selected: {selectedRamen.name}
-                  </h2>
-                  <div className="mt-4 p-4 rounded-lg bg-gray-100 border border-gray-300">
-                    <p className="text-5xl font-bold text-gray-800">
-                      {formatTime(timeRemaining)}
-                    </p>
-                  </div>
-                  <div className="mt-6 flex justify-center space-x-4">
-                    {timerStatus === "idle" && (
-                      <button
-                        onClick={handleStartTimer}
-                        className="px-6 py-2 bg-green-500 text-white rounded-lg shadow-md font-bold transition-all duration-200 hover:bg-green-600"
-                      >
-                        Start
-                      </button>
-                    )}
-                    {timerStatus === "running" && (
-                      <button
-                        onClick={handlePauseTimer}
-                        className="px-6 py-2 bg-yellow-500 text-white rounded-lg shadow-md font-bold transition-all duration-200 hover:bg-yellow-600"
-                      >
-                        Pause
-                      </button>
-                    )}
-                    {timerStatus === "paused" && (
-                      <button
-                        onClick={handleStartTimer}
-                        className="px-6 py-2 bg-green-500 text-white rounded-lg shadow-md font-bold transition-all duration-200 hover:bg-green-600"
-                      >
-                        Resume
-                      </button>
-                    )}
-                    {(timerStatus === "running" ||
-                      timerStatus === "paused" ||
-                      timerStatus === "finished") && (
-                      <button
-                        onClick={handleResetTimer}
-                        className="px-6 py-2 bg-red-500 text-white rounded-lg shadow-md font-bold transition-all duration-200 hover:bg-red-600"
-                      >
-                        Reset
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            <Timer
+              selectedRamen={selectedRamen}
+              timeRemaining={timeRemaining}
+              timerStatus={timerStatus}
+              handleStartTimer={handleStartTimer}
+              handlePauseTimer={handlePauseTimer}
+              handleResetTimer={handleResetTimer}
+            />
 
-            {/* temp completion message modal */}
-            {showCompletionMessage && (
-              <div className="fixed inset-0 flex items-center justify-center z-20">
-                <div className="bg-white rounded-xl p-6 shadow-xl w-full max-w-xs text-center border-4 border-green-500">
-                  <h2 className="text-2xl font-bold text-green-700">
-                    Ramen is Ready!
-                  </h2>
-                  <p className="mt-2">Enjoy your meal.</p>
-                  <button
-                    onClick={() => {
-                      setShowCompletionMessage(false);
-                      handleResetTimer();
-                    }}
-                    className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg font-bold"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
+            <TimerDone
+              showCompletionMessage={showCompletionMessage}
+              setShowCompletionMessage={setShowCompletionMessage}
+              handleResetTimer={handleResetTimer}
+            />
           </div>
 
           {/* temp display timer history */}
-          <div
+          {/* <div
             className="mt-6 w-full max-w-sm rounded-xl p-6"
             style={{ backgroundColor: "#d48d3bff" }}
           >
@@ -279,8 +199,7 @@ const Layout = ({ children }) => {
                       <strong>Duration:</strong> {log.duration_seconds} seconds
                     </p>
                     <p>
-                      <strong>Completed:</strong>{" "}
-                      {formatDate(log.start_time)}
+                      <strong>Completed:</strong> {formatDate(log.start_time)}
                     </p>
                   </li>
                 ))}
@@ -290,7 +209,7 @@ const Layout = ({ children }) => {
                 No timers have been logged yet.
               </p>
             )}
-          </div>
+          </div> */}
         </div>
         {children}
       </body>

@@ -8,13 +8,13 @@ const Layout = ({ children }) => {
     <html lang="en">
       <body>
         <div
-          className="flex justify-center items-center min-h-screen w-screen py-6 overflow-hidden"
+          className="flex justify-center items-center min-h-screen w-screen"
           style={{
             backgroundColor: "#ebe2d8",
           }}
         >
           <div
-            className="w-full max-w-sm rounded-xl pb-6 pr-6 pl-6"
+            className="w-full max-w-sm rounded-xl pb-6 pr-6 pl-6 my-auto"
             style={{
               backgroundColor: "#efd1af",
             }}

@@ -145,6 +145,40 @@ export default function Page() {
           />
         )}
       </div>
+
+      {/* temp display timer history */}
+      <div
+        className="mt-6 w-full max-w-sm rounded-xl p-6"
+        style={{ backgroundColor: "#d48d3bff" }}
+      >
+        <h2
+          className="text-center text-2xl font-extrabold mb-4"
+          style={{ color: "#451a03" }}
+        >
+          Timer History
+        </h2>
+        {timerLogs.length > 0 ? (
+          <ul className="space-y-2">
+            {timerLogs.map((log) => (
+              <li key={log.id} className="p-3 bg-white rounded-lg text-sm">
+                <p>
+                  <strong>Ramen:</strong> {log.ramen_name}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {log.duration_seconds} seconds
+                </p>
+                <p>
+                  <strong>Completed:</strong> {formatDate(log.start_time)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center text-gray-600">
+            No timers have been logged yet.
+          </p>
+        )}
+      </div>
     </main>
   );
 }

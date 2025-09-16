@@ -53,6 +53,7 @@ export default function Page() {
 
       const result = await response.json();
       console.log("Timer logged successfully:", result);
+      fetchTimers(userId);
     } catch (error) {
       console.error("Error sending timer log:", error);
     }
@@ -94,7 +95,6 @@ export default function Page() {
           ramenName: selectedRamen.name,
           duration: selectedRamen.duration,
         });
-        fetchTimers(userId);
       }
     }
 

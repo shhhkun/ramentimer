@@ -26,7 +26,7 @@ app.get("/api/timers", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT ramen_name, duration_seconds FROM timer_logs WHERE user_id = $1 ORDER BY start_time DESC;",
+      "SELECT ramen_name, duration_seconds, start_time FROM timer_logs WHERE user_id = $1 ORDER BY start_time DESC;",
       [userId]
     );
     res.status(200).json(result.rows);

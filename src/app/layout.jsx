@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
           }}
         >
           <div
-            className="w-full max-w-sm rounded-xl pb-6 pr-6 pl-6 my-auto"
+            className="w-full max-w-sm rounded-xl pb-6 pr-6 pl-6"
             style={{
               backgroundColor: "#efd1af",
             }}

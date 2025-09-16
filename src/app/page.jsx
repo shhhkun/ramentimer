@@ -5,9 +5,17 @@ import RamenCard from "./components/RamenCard";
 import Timer from "./components/Timer";
 import TimerDone from "./components/TimerDone";
 import TimerHistory from "./components/TimerHistory";
+import { ListDashesIcon } from "@phosphor-icons/react";
 import "./globals.css";
 
-import { ListDashesIcon } from "@phosphor-icons/react";
+function getPersistentUserId() {
+  let userId = localStorage.getItem("ramen_timer_user_id");
+  if (!userId) {
+    userId = crypto.randomUUID();
+    localStorage.setItem("ramen_timer_user_id", userId);
+  }
+  return userId;
+}
 
 // data for ramen: (brand name, image src, time in secs)
 const ramenData = [
@@ -26,17 +34,17 @@ export default function Page() {
   const [timerLogs, setTimerLogs] = useState([]);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [showTimerHistory, setShowTimerHistory] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
     try {
       const response = await fetch("/api/timers", {
-        //http://localhost:3001/api/timers
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(logData),
+        body: JSON.stringify({ ...logData, userId }),
       });
 
       if (!response.ok) {
@@ -52,6 +60,10 @@ export default function Page() {
 
   // helper function to fetch logs from the backend
   const fetchTimers = async () => {
+    if (!userId) {
+      console.error("User ID not available, cannot fetch logs.");
+      return;
+    }
     try {
       const response = await fetch("/api/timers"); //http://localhost:3001/api/timers
       if (!response.ok) {
@@ -92,7 +104,15 @@ export default function Page() {
 
   // useEffect to fetch logs on initial component load
   useEffect(() => {
-    fetchTimers();
+    if (!userId) {
+      fetchTimers();
+    }
+  }, [userId]);
+
+  // fetch user ID
+  useEffect(() => {
+    const id = getPersistentUserId();
+    setUserId(id);
   }, []);
 
   const handleStartTimer = () => {

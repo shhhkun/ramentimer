@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     <html lang="en">
       <body>
         <div
-          className="flex justify-center items-center min-h-screen w-screen"
+          className="flex justify-center w-screen" //items-center min-h-screen
           style={{
             backgroundColor: "#ebe2d8",
           }}

@@ -12,7 +12,7 @@ const ramenData = [
   { name: "Jin", imageSrc: "/jin.png", duration: 270 },
   { name: "Samyang", imageSrc: "/samyang.png", duration: 300 },
   { name: "Paldo", imageSrc: "/paldo.png", duration: 210 },
-  { name: "Lucky Me", imageSrc: "/luckyme.png", duration: 10 },
+  { name: "Lucky Me!", imageSrc: "/luckyme.png", duration: 10 },
   { name: "Indomie", imageSrc: "/indomie.png", duration: 240 },
 ];
 
@@ -26,7 +26,8 @@ export default function Page() {
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
     try {
-      const response = await fetch("http://localhost:3001/api/timers", {
+      const response = await fetch("/api/timers", {
+        //http://localhost:3001/api/timers
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export default function Page() {
   // helper function to fetch logs from the backend
   const fetchTimers = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/timers");
+      const response = await fetch("/api/timers"); //http://localhost:3001/api/timers
       if (!response.ok) {
         throw new Error("Failed to fetch timer logs.");
       }

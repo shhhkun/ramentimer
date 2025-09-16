@@ -4,11 +4,6 @@ import "./globals.css";
 
 const Layout = ({ children }) => {
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
-
   return (
     <html lang="en">
       <body>

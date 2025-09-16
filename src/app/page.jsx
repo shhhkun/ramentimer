@@ -110,6 +110,11 @@ export default function Page() {
     setSelectedRamen(null);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
   return (
     <main className="h-full">
       <div className="h-full">

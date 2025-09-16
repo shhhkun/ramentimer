@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import RamenCard from "./components/RamenCard";
 import Timer from "./components/Timer";
 import TimerDone from "./components/TimerDone";
+import TimerHistory from "./components/TimerHistory";
 import "./globals.css";
+
+import { ListDashesIcon } from "@phosphor-icons/react";
 
 // data for ramen: (brand name, image src, time in secs)
 const ramenData = [
@@ -22,6 +25,7 @@ export default function Page() {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [timerLogs, setTimerLogs] = useState([]);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+  const [showTimerHistory, setShowTimerHistory] = useState(false);
 
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
@@ -110,15 +114,18 @@ export default function Page() {
     setSelectedRamen(null);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
-
   return (
     <main className="h-full">
-      <div className="h-full">
-        {!selectedRamen && (
+      <div className="relative h-full">
+        <button
+          className="absolute right-0 top-[-40px] transition-transform duration-200 ease-in-out hover:scale-110"
+          onClick={() => setShowTimerHistory((prev) => !prev)}
+          disabled={selectedRamen || showCompletionMessage}
+        >
+          <ListDashesIcon size={32} />
+        </button>
+
+        {!selectedRamen && !showTimerHistory && (
           <div className="grid grid-cols-2 gap-6 p-4">
             {ramenData.map((ramen, index) => (
               <RamenCard
@@ -149,40 +156,8 @@ export default function Page() {
             handleResetTimer={handleResetTimer}
           />
         )}
-      </div>
 
-      {/* temp display timer history */}
-      <div
-        className="mt-6 w-full max-w-sm rounded-xl p-6"
-        style={{ backgroundColor: "#d48d3bff" }}
-      >
-        <h2
-          className="text-center text-2xl font-extrabold mb-4"
-          style={{ color: "#451a03" }}
-        >
-          Timer History
-        </h2>
-        {timerLogs.length > 0 ? (
-          <ul className="space-y-2">
-            {timerLogs.map((log) => (
-              <li key={log.id} className="p-3 bg-white rounded-lg text-sm">
-                <p>
-                  <strong>Ramen:</strong> {log.ramen_name}
-                </p>
-                <p>
-                  <strong>Duration:</strong> {log.duration_seconds} seconds
-                </p>
-                <p>
-                  <strong>Completed:</strong> {formatDate(log.start_time)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center text-gray-600">
-            No timers have been logged yet.
-          </p>
-        )}
+        {showTimerHistory && <TimerHistory timerLogs={timerLogs} />}
       </div>
     </main>
   );

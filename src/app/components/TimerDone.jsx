@@ -6,7 +6,7 @@ const TimerDone = ({
   return (
     <div className="relative h-full w-full flex items-center justify-center z-10 p-6">
       <h2
-        className="absolute text-center -translate-y-36"
+        className="absolute text-center top-24"
         style={{ fontSize: "1.25rem" }}
       >
         Your {selectedRamen.name} ramen is...

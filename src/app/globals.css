@@ -24,3 +24,11 @@ body {
 h3 {
   font-family: "Jersey 10", Arial, sans-serif;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}

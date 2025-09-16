@@ -59,7 +59,7 @@ export default function Page() {
   };
 
   // helper function to fetch logs from the backend
-  const fetchTimers = async () => {
+  const fetchTimers = async (userId) => {
     if (!userId) {
       console.error("User ID not available, cannot fetch logs.");
       return;
@@ -94,7 +94,7 @@ export default function Page() {
           ramenName: selectedRamen.name,
           duration: selectedRamen.duration,
         });
-        fetchTimers();
+        fetchTimers(userId);
       }
     }
 

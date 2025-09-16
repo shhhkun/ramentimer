@@ -65,7 +65,7 @@ export default function Page() {
       return;
     }
     try {
-      const response = await fetch("/api/timers"); //http://localhost:3001/api/timers
+      const response = await fetch("/api/timers?userId=${currentUserId}");
       if (!response.ok) {
         throw new Error("Failed to fetch timer logs.");
       }
@@ -102,17 +102,14 @@ export default function Page() {
     return () => clearInterval(intervalId);
   }, [timerStatus, timeRemaining, selectedRamen]);
 
-  // useEffect to fetch logs on initial component load
-  useEffect(() => {
-    if (!userId) {
-      fetchTimers();
-    }
-  }, [userId]);
-
-  // fetch user ID
+  // hook to run on mount & when user state changes
   useEffect(() => {
     const id = getPersistentUserId();
     setUserId(id);
+
+    if (id) {
+      fetchTimers(id);
+    }
   }, []);
 
   const handleStartTimer = () => {

@@ -65,7 +65,7 @@ export default function Page() {
       return;
     }
     try {
-      const response = await fetch("/api/timers?userId=${currentUserId}");
+      const response = await fetch(`/api/timers?userId=${currentUserId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch timer logs.");
       }

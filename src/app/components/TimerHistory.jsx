@@ -1,5 +1,6 @@
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  // replace the space with 'T' and append 'Z' to create a valid ISO string
+  const date = new Date(dateString.replace(" ", "T") + "Z");
   return date.toLocaleString();
 };
 

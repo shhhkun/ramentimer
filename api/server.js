@@ -50,7 +50,7 @@ app.post("/api/timers", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "INSERT INTO timer_logs(ramen_name, duration_seconds, user_id, start_time) VALUES($1, $2, $3, $4) RETURNING *;",
+      "INSERT INTO timer_logs(ramen_name, duration_seconds, user_id, start_time) VALUES($1, $2, $3, $4::timestamp with time zone) RETURNING *;",
       [ramenName, duration, userId, new Date().toISOString()]
     );
     res.status(201).json(result.rows[0]);

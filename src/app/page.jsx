@@ -19,12 +19,12 @@ function getPersistentUserId() {
 
 // data for ramen: (brand name, image src, time in secs)
 const ramenData = [
-  { name: "Shin", imageSrc: "/shin.png", duration: 5 },
-  { name: "Jin", imageSrc: "/jin.png", duration: 270 },
-  { name: "Samyang", imageSrc: "/samyang.png", duration: 300 },
-  { name: "Paldo", imageSrc: "/paldo.png", duration: 210 },
-  { name: "Lucky Me!", imageSrc: "/luckyme.png", duration: 10 },
-  { name: "Indomie", imageSrc: "/indomie.png", duration: 240 },
+  { name: "Shin", imageSrc: "/shin.png", duration: 270 }, // 4.5min
+  { name: "Jin", imageSrc: "/jin.png", duration: 270 }, // 4.5min
+  { name: "Samyang", imageSrc: "/samyang.png", duration: 330 }, // 5.5min
+  { name: "Paldo", imageSrc: "/paldo.png", duration: 270 }, // 4.5min
+  { name: "Lucky Me!", imageSrc: "/luckyme.png", duration: 240 }, // 4min
+  { name: "Indomie", imageSrc: "/indomie.png", duration: 240 }, // 4min
 ];
 
 export default function Page() {

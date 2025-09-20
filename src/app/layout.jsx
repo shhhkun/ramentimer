@@ -1,12 +1,14 @@
 "use client";
 
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const Layout = ({ children }) => {
-
   return (
     <html lang="en">
       <body>
+        <Analytics />
+
         <div
           className="flex justify-center w-screen" //items-center min-h-screen
           style={{

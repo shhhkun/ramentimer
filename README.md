@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ramen Timer
+
+This is a simple mobile-first ramen timer web app with a nostalgic, pixel-art aesthetic. It has (cooking) times for my favorite brands which include: Shin, Jin, Samyang, Paldo, Lucky Me!, and Indomie. There is also a timer log you can access by clicking the menu icon to view all your previous completed timers.
+
+[**Website**](https://ramentimer.vercel.app/)
+
+## Features
+
+- **Responsive Interface:** App sizes accordingly to your device viewport (size).
+
+- **6 Ramen Timers:** 6 timers for average cooking times for ramen, based specifically on: Shin Ramyun, Jin Ramen, Samyang Buldak, Paldo Jjajangmen, Lucky Me! Pancit Canton, and Indomie.
+
+## Some Technologies Used
+
+- **Google Fonts:** For custom typography, including the header font, Jersey 10, and the body font, Pixelify Sans.
 
 ## Getting Started
 
-First, run the development server:
+To run this project locally:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Clone the repository:
+
+```
+git clone https://github.com/shhhkun/ramentimer.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project directory:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+cd your-folder
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Install dependencies:
 
-## Learn More
+```
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Start the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+npm run dev
+```

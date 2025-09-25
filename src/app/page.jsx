@@ -27,6 +27,31 @@ const ramenData = [
   { name: "Indomie", imageSrc: "/indomie.png", duration: 240 }, // 4min
 ];
 
+const useResponsiveSize = () => {
+  const [size, setSize] = useState(32); // default size
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setSize(56); // lg size
+      } else if (window.innerWidth >= 640) {
+        setSize(44); // sm size
+      } else {
+        setSize(32); // default size
+      }
+    };
+
+    handleResize(); // set initial size
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return size;
+};
+
 export default function Page() {
   const [selectedRamen, setSelectedRamen] = useState(null);
   const [timerStatus, setTimerStatus] = useState("idle"); // idle, running, paused, finished
@@ -35,6 +60,7 @@ export default function Page() {
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [showTimerHistory, setShowTimerHistory] = useState(false);
   const [userId, setUserId] = useState(null);
+  const iconSize = useResponsiveSize();
 
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
@@ -135,15 +161,15 @@ export default function Page() {
     <main className="h-full">
       <div className="relative h-full">
         <button
-          className="absolute right-0 top-[-40px] transition-transform duration-200 ease-in-out hover:scale-110"
+          className="absolute right-0 top-[-40px] sm:top-[-60px] lg:top-[-76px] transition-transform duration-200 ease-in-out hover:scale-110"
           onClick={() => setShowTimerHistory((prev) => !prev)}
           disabled={selectedRamen || showCompletionMessage}
         >
-          <ListDashesIcon size={32} />
+          <ListDashesIcon size={iconSize} />
         </button>
 
         {!selectedRamen && !showTimerHistory && (
-          <div className="grid grid-cols-2 gap-6 p-4">
+          <div className="grid grid-cols-2 gap-6 p-6 sm:gap-8 sm:p-8 lg:gap-10 lg:p-10">
             {ramenData.map((ramen, index) => (
               <RamenCard
                 key={index}

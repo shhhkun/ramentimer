@@ -8,16 +8,15 @@ const formatDate = (dateString) => {
 
 const TimerHistory = ({ timerLogs }) => {
   return (
-    <div className="h-full w-full rounded-xl p-6 overflow-y-auto hide-scrollbar">
+    <div className="h-full w-full rounded-xl p-6 sm:p-8 lg:p-10 overflow-y-auto hide-scrollbar">
       {timerLogs.length > 0 ? (
         <ul className="space-y-4">
           {timerLogs.map((log) => (
             <li
               key={log.id}
-              className="p-4 rounded-lg"
+              className="text-sm sm:text-base lg:text-xl p-4 sm:p-6 lg:p-8 text-center rounded-lg"
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.6)",
-                fontSize: "0.875rem",
+                backgroundColor: "var(--cardbg2)",
               }}
             >
               <p>
@@ -32,10 +31,9 @@ const TimerHistory = ({ timerLogs }) => {
         </ul>
       ) : (
         <p
-          className="text-center p-4 rounded-lg"
+          className="text-sm sm:text-base lg:text-xl p-4 sm:p-6 lg:p-8 text-center rounded-lg"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.6)",
-            fontSize: "0.875rem",
+            backgroundColor: "var(--cardbg2)",
           }}
         >
           No timers have been logged yet.

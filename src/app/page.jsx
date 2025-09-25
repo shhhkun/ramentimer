@@ -6,6 +6,7 @@ import Timer from "./components/Timer";
 import TimerDone from "./components/TimerDone";
 import TimerHistory from "./components/TimerHistory";
 import { ListDashesIcon } from "@phosphor-icons/react";
+import ResponsiveSize from "./components/ResponsiveSize";
 import "./globals.css";
 
 function getPersistentUserId() {
@@ -27,31 +28,6 @@ const ramenData = [
   { name: "Indomie", imageSrc: "/indomie.png", duration: 240 }, // 4min
 ];
 
-const useResponsiveSize = () => {
-  const [size, setSize] = useState(32); // default size
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setSize(56); // lg size
-      } else if (window.innerWidth >= 640) {
-        setSize(44); // sm size
-      } else {
-        setSize(32); // default size
-      }
-    };
-
-    handleResize(); // set initial size
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return size;
-};
-
 export default function Page() {
   const [selectedRamen, setSelectedRamen] = useState(null);
   const [timerStatus, setTimerStatus] = useState("idle"); // idle, running, paused, finished
@@ -60,7 +36,7 @@ export default function Page() {
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [showTimerHistory, setShowTimerHistory] = useState(false);
   const [userId, setUserId] = useState(null);
-  const iconSize = useResponsiveSize();
+  const { icon } = ResponsiveSize();
 
   // helper function to send the log to the backend
   const sendTimerLog = async (logData) => {
@@ -165,7 +141,7 @@ export default function Page() {
           onClick={() => setShowTimerHistory((prev) => !prev)}
           disabled={selectedRamen || showCompletionMessage}
         >
-          <ListDashesIcon size={iconSize} />
+          <ListDashesIcon size={icon} />
         </button>
 
         {!selectedRamen && !showTimerHistory && (

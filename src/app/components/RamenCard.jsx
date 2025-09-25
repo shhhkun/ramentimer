@@ -26,6 +26,8 @@ const useResponsiveSize = () => {
 };
 
 const RamenCard = ({ ramen, onClick }) => {
+  const ramenSize=useResponsiveSize();
+
   return (
     <div
       onClick={onClick}
@@ -33,7 +35,7 @@ const RamenCard = ({ ramen, onClick }) => {
       style={{ backgroundColor: "var(--cardbg2)" }} // translucent white card bg
     >
       <img
-        className={`aspect-square w-${useResponsiveSize()} transition-transform duration-200 ease-in-out hover:scale-110`}
+        className={`aspect-square w-${ramenSize} transition-transform duration-200 ease-in-out hover:scale-110`}
         src={ramen.imageSrc}
         alt={ramen.name}
         style={{

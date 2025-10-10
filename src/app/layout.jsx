@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata = {
   title: "Ramen Timer",
   description: "Cooking timer for your ramen.",
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     title: "Ramen Timer",
     description: "Cooking timer for your ramen.",

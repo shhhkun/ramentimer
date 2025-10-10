@@ -3,6 +3,25 @@
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
+export const metadata = {
+  title: "Ramen Timer",
+  description: "Cooking timer for your ramen.",
+  openGraph: {
+    title: "Ramen Timer",
+    description: "Cooking timer for your ramen.",
+    url: "https://ramentimer.vercel.app/",
+    type: "website",
+    images: [
+      {
+        url: "https://ramentimer.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ramen Timer Preview",
+      },
+    ],
+  },
+};
+
 const Layout = ({ children }) => {
   return (
     <html lang="en">

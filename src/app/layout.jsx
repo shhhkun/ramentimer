@@ -1,5 +1,3 @@
-"use client";
-
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
